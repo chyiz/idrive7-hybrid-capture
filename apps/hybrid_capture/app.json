@@ -1,0 +1,227 @@
+{
+  "id": "hybrid_capture",
+  "title": "Hybrid Capture",
+  "description": "PHEV Anticipatory Hybrid Drive (VEM), ICE cut-in reason, sailing/coasting, NavGraph2/eDriveZone telemetry recorder & safety-gated SOME/IP write probe tool for BMW iDrive 7",
+  "version": "0.1.0",
+  "startType": "manually",
+  "license": "GPL-3.0-only",
+  "vendor": "chyiz",
+  "bundleNotices": [
+    "Hybrid Capture - GNU General Public License v3.0 (GPL-3.0, see LICENSE).",
+    "Copyright (c) 2026 chyiz (https://github.com/chyiz)",
+    "",
+    "Bundled runtime dependencies retain their upstream licenses:",
+    "- kit/*: MIT License (cauliflowermossgrape/idrive7-apps)"
+  ],
+  "repoTitle": "GitHub Repository",
+  "repoLink": "github.com/chyiz/idrive7-hybrid-capture",
+  "loggingId": "OA7F",
+  "iconGlyph": "hybrid_capture",
+  "mguHmi": ["ID7"],
+  "signals": {
+    "de.bmw.infotainment.drivingexcitement.Efficiencytainment2": {
+      "_optional": "Anticipatory Hybrid Drive (VEM) state, foresight events, hybrid operating mode, SOC hold target & HV battery %",
+      "statusSocHoldConfiguration": "rs",
+      "statusAnticipatedModeHybrid": "rs",
+      "statusOperatingModeHybrid": "rs",
+      "statusPowerRelativHybrid": "rs",
+      "statusChargeOfBatteryHybrid": "rs",
+      "statusBatteryTemperature": "rs",
+      "socHoldConfiguration": "w"
+    },
+    "de.bmw.infotainment.drivingexcitement.Efficiencytainment": {
+      "_optional": "ICE power-up / switch-off prevention reason, coasting/sailing state, and Battery Control availability",
+      "statusReasonPowerUpCombustionEngine": "rs",
+      "statusPowerTrainSailing": "rs",
+      "backchannelDrivingmodeDxp": "s",
+      "statusDisplayHybridBenefit": "rs",
+      "statusECOState1": "rs"
+    },
+    "de.bmw.infotainment.drivingexcitement.FES": {
+      "_optional": "active drive mode (Hybrid Eco Pro / Battery Control), drive strategy flags, and EV prevention reasons",
+      "statusFESVehicleDynamicSwitchHMI": "rs",
+      "statusFESDriveStrategy": "rs",
+      "statusEDriveEVSystemState": "rs",
+      "statusElectricVehicleDriveSystemState": "rs",
+      "fesDriveStrategy": "w"
+    },
+    "de.bmw.powertrain.Powertrain": {
+      "_optional": "combustion engine state (MOTOR_STEHT/STARTET/LAEUFT), electric mode flag, and gearbox program",
+      "StatusCombustionEngine": "s"
+    },
+    "de.bmw.powertrain.Range": {
+      "_optional": "intelligent route range active flag and electric/total range readouts",
+      "dataRangeCalculation": "s",
+      "dataRangeDisplay": "s"
+    },
+    "de.bmw.infotainment.vehicle.Vehicle": {
+      "_optional": "display units, hybrid trip energy forecast, intelligent range inputs, and MSA status",
+      "statusNewCurrentUnitsStatusExt": "rs",
+      "statusTripInformationElectricHybrid": "rs",
+      "intelligentRangeCalculation": "s",
+      "statusDriveVehicle": "rs",
+      "statusMotorStartAuto": "s"
+    },
+    "de.bmw.infotainment.vehicle.Vehicle2": {
+      "statusCarSpeed2": "rs",
+      "highVoltageStorageInfoToExternal": "s"
+    },
+    "de.bmw.infotainment.vehicle.CDS": {
+      "statusEngineSpeed2": "rs",
+      "statusEngineStatus": "rs"
+    },
+    "de.bmw.infotainment.KombiIF": {
+      "_optional": "EV range display, electrical power distribution, and routeDestinationElectricHybrid write probe",
+      "displayRangeElectricVehicle": "rs",
+      "statusDisplayElectricalPowerDistribution": "rs",
+      "routeDestinationElectricHybrid": "w"
+    },
+    "de.bmw.infotainment.navigation.NavigationCAN": {
+      "_optional": "remaining destination distance and ETA published onto CAN",
+      "calculationDataNavigation": "rs"
+    },
+    "de.bmw.infotainment.navigation.ADAS": {
+      "_optional": "monitor DME/EME/EGS NavGraph resynchronization requests",
+      "resynchronisationNavigationGraph": "s"
+    },
+    "de.bmw.infotainment.navigation.foresight.connected.ConnectedForesight": {
+      "_optional": "eDrive Zone foresight events broadcast to powertrain",
+      "_broadcasts": [
+        "EDriveZones"
+      ]
+    },
+    "de.bmw.infotainment.navigation.guiding.Guidance": {
+      "_optional": "native BMW navigation guidance state, provider, and destination distance",
+      "_instances": "Main_Instance",
+      "guidanceState": "rs",
+      "guidingProvider": "rs",
+      "finalDestinationInfo": "rs",
+      "currentRoad": "rs"
+    },
+    "de.bmw.infotainment.a4a.carplay.CarPlayManager": {
+      "_optional": "detect active Apple CarPlay projected route guidance",
+      "_instances": "CarPlayManagerInst1",
+      "projectedGuidanceActive": "rs"
+    },
+    "de.bmw.infotainment.navigation.externalize.adasng.CCP": {
+      "_optional": "current road class (highway vs urban), ramp flag, and effective speed limit from map matcher",
+      "_broadcasts": [
+        "roadClass",
+        "urbanFlag",
+        "builtupAreaFlag",
+        "effectiveSpeedLimit",
+        "rampFlag"
+      ]
+    },
+    "de.bmw.infrastructure.VehicleCondition": {
+      "_optional": "flush & stop active capture cleanly when car turns off",
+      "VehicleCondition": "s"
+    }
+  },
+  "screens": [
+    {
+      "name": "MAIN",
+      "kind": "menu",
+      "title": "Hybrid Capture",
+      "settings": false,
+      "repoLink": false,
+      "items": [
+        ["tworow", "ROW_STATUS", "Capture Status"],
+        ["tworow", "ROW_DRIVE", "Powertrain & Sailing"],
+        ["tworow", "ROW_VEM", "VEM & ICE Cut-In Reason"],
+        ["tworow", "ROW_NAV", "Navigation & Road Context"],
+        ["tworow", "BTN_REC", "Start Recording"],
+        ["button", "BTN_MARK", "Mark Event (ICE Cut-In!)"],
+        ["button", "BTN_TAG_NONE", "Tag Phase: Baseline (No Nav)"],
+        ["button", "BTN_TAG_BMW", "Tag Phase: BMW Nav (VEM)"],
+        ["button", "BTN_TAG_CP", "Tag Phase: CarPlay Nav"],
+        ["tworow", "TAB_LIVE", "Live Signal Monitor"],
+        ["tworow", "TAB_PROBES", "Experimental Write Probes"],
+        ["tworow", "TAB_SESSIONS", "Captures, Export & Settings"]
+      ]
+    },
+    {
+      "name": "LIVE",
+      "kind": "menu",
+      "title": "Live VEM & Hybrid Telemetry",
+      "settings": false,
+      "repoLink": false,
+      "items": [
+        ["tworow", "LIVE_POWER", "Speed / RPM / ICE / E-Motor"],
+        ["tworow", "LIVE_MODE", "Drive Mode / Sailing / BattCtrl"],
+        ["tworow", "LIVE_VEM", "VEM / Foresight / OpMode"],
+        ["tworow", "LIVE_REASON", "ICE Start & EV Prevention Reasons"],
+        ["tworow", "LIVE_BATT", "HV SoC / Target / EV Range"],
+        ["tworow", "LIVE_NAV", "Nav State / Dist / Road Class"],
+        ["tworow", "LIVE_ADAS", "NavGraph Resync / eZone / Forecast"],
+        ["tworow", "LIVE_HEALTH", "SOME/IP Proxies & Capture File"]
+      ]
+    },
+    {
+      "name": "PROBES",
+      "kind": "menu",
+      "title": "Experimental Write Probes",
+      "settings": [
+        "probesArmed",
+        ["tworow", "ROW_PROBE_STATUS", "Probe Status"],
+        ["button", "BTN_PROBE_BH_ON", "Opt 1: BattCtrl Toggle ON + Sailing"],
+        ["button", "BTN_PROBE_BH_OFF", "Opt 1: BattCtrl Toggle OFF"],
+        ["button", "BTN_PROBE_SOC_MATCH", "Opt 1: Set Target SoC = Current %"],
+        ["button", "BTN_PROBE_PREF_OFF", "Opt 1: EV Drive Pref = AUS (0)"],
+        ["button", "BTN_PROBE_PREF_ON", "Opt 1: EV Drive Pref = AN (1)"],
+        ["tworow", "BTN_PROBE_ROUTE", "Opt 3: Fake KombiIF Route Forecast"],
+        ["tworow", "ROW_PROBE_READBACK", "Live Readback (Mode / Sail / Range)"]
+      ],
+      "repoLink": false
+    },
+    {
+      "name": "SESSIONS",
+      "kind": "menu",
+      "title": "Captures & Settings",
+      "settings": [
+        ["tworow", "ROW_SESS_CURRENT", "Latest Mirror Path"],
+        ["tworow", "ROW_SESS_LIST", "Stored Captures"],
+        ["button", "BTN_CLEAR_CAPTURES", "Clear Saved Captures (2x Press)"],
+        "speedUnit",
+        "autoRecord",
+        "demo"
+      ],
+      "repoLink": true
+    }
+  ],
+  "settings": [
+    {
+      "key": "probesArmed",
+      "label": "Arm Write Probes (Experimental)",
+      "type": "bool",
+      "default": false
+    },
+    {
+      "key": "speedUnit",
+      "label": "Speed & distance unit",
+      "type": "choice",
+      "default": "mph",
+      "options": [
+        ["mph", "MPH / miles"],
+        ["kmh", "km/h / km"]
+      ]
+    },
+    {
+      "key": "autoRecord",
+      "label": "Auto-start capture when app opens",
+      "type": "bool",
+      "default": false
+    },
+    {
+      "key": "demo",
+      "label": "Demo data (bench / preview)",
+      "type": "choice",
+      "default": "auto",
+      "options": [
+        ["auto", "Auto (live car if present)"],
+        ["on", "Always demo"],
+        ["off", "Live car only"]
+      ]
+    }
+  ]
+}

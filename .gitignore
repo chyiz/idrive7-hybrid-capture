@@ -1,0 +1,11 @@
+# Build output, npm packages, and local SDK stub (never commit oap-sdk)
+dist/
+node_modules/
+oap-sdk/
+*.log
+captures/
+*.pcap
+*.jsonl
+__pycache__/
+*.pyc
+.DS_Store

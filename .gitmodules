@@ -1,0 +1,3 @@
+[submodule "vendor/cauliflowermossgrape-idrive7-apps"]
+	path = vendor/cauliflowermossgrape-idrive7-apps
+	url = https://github.com/chyiz/cauliflowermossgrape-idrive7-apps.git

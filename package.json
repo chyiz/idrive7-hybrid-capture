@@ -1,0 +1,10 @@
+{
+  "name": "idrive7-hybrid-capture",
+  "version": "0.1.0",
+  "private": true,
+  "license": "GPL-3.0-only",
+  "scripts": {
+    "build": "python3 vendor/cauliflowermossgrape-idrive7-apps/kit/tools/build.py --stub-sdk hybrid_capture",
+    "test": "node test/run_tests.js"
+  }
+}
